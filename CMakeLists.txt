@@ -1,4 +1,4 @@
-# Copyright © 2018, Intel Corporation
+# Copyright © 2019, Intel Corporation
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -107,7 +107,8 @@ set (LOCAL_SRC_FILES ${LOCAL_SRC_FILES}
     ${BS_DIR_INSTRUMENTATION}/metrics_discovery/linux/md_driver_ifc_linux_perf.cpp
     # utils
     ${BS_DIR_INSTRUMENTATION}/utils/common/iu_debug.c
-    ${BS_DIR_INSTRUMENTATION}/utils/linux/iu_std_linux.cpp
+    ${BS_DIR_INSTRUMENTATION}/utils/linux/iu_std.cpp
+    ${BS_DIR_INSTRUMENTATION}/utils/linux/iu_os.cpp
     # external
     ${BS_DIR_EXTERNAL}/mesa/src/intel/common/gen_device_info.c
 )
