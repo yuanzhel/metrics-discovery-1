@@ -1681,6 +1681,75 @@ Class:
     CDriverInterfaceLinuxPerf
 
 Method:
+    ReadPerfCapabilities
+
+Description:
+    Checks whether certain i915 Perf features are supported.
+
+\*****************************************************************************/
+void CDriverInterfaceLinuxPerf::ReadPerfCapabilities()
+{
+    ResetPerfCapabilities();
+
+    int32_t         perfRevision       = -1;
+    TCompletionCode getPerfRevisionRet = GetPerfRevision( &perfRevision );
+
+    auto requirePerfRevision = [=]( int32_t requiredPerfRevision ) {
+                                   return getPerfRevisionRet == CC_OK && perfRevision >= requiredPerfRevision;
+                               };
+
+    // Check capabilities. Update when OA interrupt will be mergerd.
+    m_PerfCapabilities.IsOaInterruptSupported     = false; //requirePerfRevision( 2 );
+    m_PerfCapabilities.IsFlushPerfStreamSupported = false; //requirePerfRevision( 2 );
+
+    PrintPerfCapabilities();
+}
+
+/*****************************************************************************\
+
+Class:
+    CDriverInterfaceLinuxPerf
+
+Method:
+    ResetPerfCapabilities
+
+Description:
+    Resets all i915 Perf capabilities struct fields to 'false'.
+
+\*****************************************************************************/
+void CDriverInterfaceLinuxPerf::ResetPerfCapabilities()
+{
+    memset( &m_PerfCapabilities, 0, sizeof(m_PerfCapabilities) );
+}
+
+/*****************************************************************************\
+
+Class:
+    CDriverInterfaceLinuxPerf
+
+Method:
+    PrintPerfCapabilities
+
+
+Description:
+    Prints all i915 Perf capabilities. For debug / information purposes.
+
+\*****************************************************************************/
+void CDriverInterfaceLinuxPerf::PrintPerfCapabilities()
+{
+    auto getSupportedString = []( bool supported ) { return supported ? "supported"
+                                                                      : "not supported"; };
+
+    MD_LOG( LOG_INFO, "Oa interrupt: %s",      getSupportedString( m_PerfCapabilities.IsOaInterruptSupported ) );
+    MD_LOG( LOG_INFO, "Flush pref stream: %s", getSupportedString( m_PerfCapabilities.IsFlushPerfStreamSupported) );
+}
+
+/*****************************************************************************\
+
+Class:
+    CDriverInterfaceLinuxPerf
+
+Method:
     OpenPerfStream
 
 Description:
